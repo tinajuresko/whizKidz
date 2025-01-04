@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		267EF43C2D29A2DD007B4F91 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 267EF43B2D29A2DD007B4F91 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		267EF3E92D243D0A007B4F91 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		267EF3D82D243D07007B4F91 /* whizKidz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whizKidz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		267EF3E82D243D0A007B4F91 /* whizKidzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = whizKidzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		267EF3F22D243D0A007B4F91 /* whizKidzUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = whizKidzUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		267EF43B2D29A2DD007B4F91 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +80,7 @@
 		267EF3CF2D243D07007B4F91 = {
 			isa = PBXGroup;
 			children = (
+				267EF43B2D29A2DD007B4F91 /* README.md */,
 				267EF3DA2D243D07007B4F91 /* whizKidz */,
 				267EF3EB2D243D0A007B4F91 /* whizKidzTests */,
 				267EF3F52D243D0A007B4F91 /* whizKidzUITests */,
@@ -212,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				267EF43C2D29A2DD007B4F91 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
