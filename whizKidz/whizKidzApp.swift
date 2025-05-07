@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct whizKidzApp: App {
+    @StateObject private var authenticationVM = AuthenticationViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if authenticationVM.isAuthenticated {
+                ContentView().environmentObject(authenticationVM)
+            } else {
+                LoginView().environmentObject(authenticationVM)
+            }
         }
     }
 }

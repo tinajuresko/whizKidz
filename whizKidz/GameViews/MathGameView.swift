@@ -51,19 +51,22 @@ struct MathGameView: View {
                         .animation(.easeInOut, value: plantStage)
                     
                     if let question = viewModel.currentQuestion {
-                        MathProblemView(problem: question, onSolve: {
-                            withAnimation {
-                                plantStage = min(plantStage + 1, 5)
+                        ProblemView(problem: question) { isCorrect in
+                            if isCorrect {
+                                withAnimation {
+                                    plantStage = min(plantStage + 1, 5)
+                                }
+                                viewModel.correctAnswers += 1
                             }
                             viewModel.round += 1
                             if viewModel.round < 5 {
                                 viewModel.getNextQuestion()
                             }else {
-                                plantStage = 1
+                                viewModel.calculateFinalScore()
                                 showModal = true
                             }
                             
-                        })
+                        }
                     } else {
                         Text("All questions answered!")
                             .font(.title)
@@ -72,12 +75,19 @@ struct MathGameView: View {
                 }.offset(y: -150)
                 
             }
-            .sheet(isPresented: $showModal) {
-                GameOverModalView( message: "Congratulations! You did great! 🏆",
-                onPlayAgain: {
-                    showModal = false
-                    viewModel.playAgain()
-                })
+            if showModal {
+                GameOverModalView(
+                    message: "Congratulations! You did great! 🏆",
+                    onPlayAgain: {
+                        showModal = false
+                        plantStage = 1
+                        viewModel.playAgain()
+                    }
+                )
+                .transition(.scale)
+                .animation(.easeInOut, value: showModal)
+                .zIndex(1)
+                    
             }
         }
     }

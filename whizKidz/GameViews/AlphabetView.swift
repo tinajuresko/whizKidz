@@ -19,7 +19,6 @@ struct AlphabetView: View {
     @State private var showModal: Bool = false
     
     var body: some View {
-        NavigationView {
             ZStack {
                 Image("background")
                     .resizable()
@@ -93,17 +92,20 @@ struct AlphabetView: View {
                     .offset(y: -50)
                     
                 }
+                if showModal {
+                    GameOverModalView(
+                        message: "Congratulations! You did great! 🏆",
+                        onPlayAgain: {
+                            showModal = false
+                            viewModel.playAgain()
+                        }
+                    )
+                    .transition(.scale)
+                    .animation(.easeInOut, value: showModal)
+                    .zIndex(1)
+                        
+                }
             }
-            
-            .sheet(isPresented: $showModal) {
-                GameOverModalView( message: "Congratulations! You did great! 🏆",
-                onPlayAgain: {
-                    showModal = false
-                    viewModel.playAgain()
-                })
-            }
-        }
-        
     }
     
     func imageTapped (image: String) {

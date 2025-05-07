@@ -6,13 +6,24 @@
 //
 
 import Foundation
+import Combine
 
 class ColorViewModel: ObservableObject {
     @Published var cards: [MemoryCard] = []
     @Published var flippedCards: [MemoryCard] = []
     @Published var score: Int = 0
-        
+    
+    @Published var gameOver: Bool = false
+    @Published var timeRemaining: Int = 30
+    var gameTimer: GameTimer!
+
     init() {
+        gameTimer = GameTimer(totalTime: 30) { [weak self] in
+            self?.endGame()
+        }
+        gameTimer.$timeRemaining
+            .assign(to: &$timeRemaining)
+        
         resetGame()
     }
     
@@ -21,6 +32,8 @@ class ColorViewModel: ObservableObject {
         let shuffledColors = (colors + colors).shuffled() // duplicate colors for pairs
         cards = shuffledColors.map { MemoryCard(color: $0) }
         score = 0
+        flippedCards = []
+        gameTimer.start()
     }
     
     func flipCard(card: MemoryCard) {
@@ -42,6 +55,10 @@ class ColorViewModel: ObservableObject {
         if flippedCards[0].color == flippedCards[1].color {
             score += 1
             flippedCards.removeAll()
+            
+            if score == ColorChoice.allCases.count {
+                endGame()
+            }
         } else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 self.flipBackCards()
@@ -56,5 +73,19 @@ class ColorViewModel: ObservableObject {
             cards[index2].isFlipped = false
         }
         flippedCards.removeAll()
+    }
+    
+    func endGame() {
+        gameTimer.stop()
+        gameOver = true
+        
+        let scoreDouble = Double(score)
+        guard let username = UserDefaults.standard.string(forKey: KeysManager.userDefaultsKey) else { return }
+        DBManager.shared.saveGameStatistics(
+            userId: username,
+            gameName: "ColorGame",
+            category: Category.Memory.rawValue,
+            score: scoreDouble
+        )
     }
 }

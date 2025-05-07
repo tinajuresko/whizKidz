@@ -10,6 +10,9 @@ import UIKit
 
 struct ContentView: View {
     @StateObject private var viewModel = GreetingsViewModel()
+    @StateObject private var authViewModel = AuthenticationViewModel()
+
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -20,19 +23,35 @@ struct ContentView: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack (spacing: 10){
-                   
-                    NavigationLink(destination: AlphabetView()) {
-                        ThemeCard(imageName: "alpha", text: "Learn Alphabet!")
+                    HStack {
+                        NavigationLink(destination: ProfileView()){
+                            Image("profile-settings")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 55, height: 55)
+                                .padding(.leading)
+                        }
+                        
+                        NavigationLink(destination: StatisticsView()){
+                            Image("award")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 55, height: 55)
+                        }
+                        
+                        Spacer()
                     }
                     
-                    NavigationLink(destination: MathGameView()) {
-                        ThemeCard(imageName: "math", text: "Learn Math!")
-                    }
                     
-                    NavigationLink(destination: ColorGameView()) {
-                        ThemeCard(imageName: "colors", text: "Learn Colors!")
-                    }
-                    
+                    ScrollView(.vertical){
+                        VStack(spacing: 10) {
+                            ForEach(games){ game in
+                                NavigationLink(destination: game.view){
+                                    ThemeCard(imageName: game.imageName, text: game.text)
+                                }
+                            }
+                        }
+                    }.padding()
                     
                     HStack {
                         ZStack {
@@ -60,6 +79,7 @@ struct ContentView: View {
             }
             .onAppear {
                 viewModel.getRandomGreetings()
+                authViewModel.printAllUsers()
             }
         }
         

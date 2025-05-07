@@ -10,6 +10,7 @@ import SwiftUI
 struct ColorGameView: View {
     @StateObject private var viewModel = ColorViewModel()
     @State private var showAlert = false
+    @State private var showModal: Bool = false
     
     let gridLayout = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
@@ -37,14 +38,18 @@ struct ColorGameView: View {
                             dismissButton: .default(Text("Got it!")))
                     }
                     Spacer()
-                    Text("Score: \(viewModel.score)")
-                        .font(.title2)
-                        .foregroundStyle(Color.blue)
-                        .padding()
+                    
+                    VStack(alignment: .trailing) {
+                        Text("Time: \(viewModel.timeRemaining)s")
+                            .font(.title3)
+                            .foregroundColor(.red)
+                        Text("Score: \(viewModel.score)")
+                            .font(.title3)
+                            .foregroundColor(.blue)
+                    }
+                    .padding()
                 }
                 
-                
-                        
                 LazyVGrid(columns: gridLayout, spacing: 20) {
                     ForEach(viewModel.cards) { card in
                         MemoryCardView(card: card)
@@ -54,8 +59,7 @@ struct ColorGameView: View {
                     }
                 }
                 .padding()
-                
-                
+            
                 Button(action: {
                     viewModel.resetGame()
                 }) {
@@ -68,7 +72,24 @@ struct ColorGameView: View {
                 }
                 .padding(.top)
             }
+            if showModal {
+                GameOverModalView(
+                    message: "Time's up ⏱️! Your score: \(viewModel.score)",
+                    onPlayAgain: {
+                        showModal = false
+                        viewModel.resetGame()
+                    }
+                )
+                .transition(.scale)
+                .zIndex(1)
+            }
         }
+        .onChange(of: viewModel.gameOver) { isGameOver in
+            if isGameOver {
+                showModal = true
+            }
+        }
+
     }
 }
 

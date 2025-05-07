@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		267EF43C2D29A2DD007B4F91 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 267EF43B2D29A2DD007B4F91 /* README.md */; };
+		26B8E54A2DA5851E0042D2C1 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 26B8E5492DA5851E0042D2C1 /* GRDB */; };
+		26F017FF2DCA90C200E60DB1 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 26F017FE2DCA90C200E60DB1 /* KeychainAccess */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,9 +36,22 @@
 		267EF43B2D29A2DD007B4F91 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		26B8E40F2D94787E0042D2C1 /* Exceptions for "whizKidz" folder in "whizKidz" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 267EF3D72D243D07007B4F91 /* whizKidz */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		267EF3DA2D243D07007B4F91 /* whizKidz */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				26B8E40F2D94787E0042D2C1 /* Exceptions for "whizKidz" folder in "whizKidz" target */,
+			);
 			path = whizKidz;
 			sourceTree = "<group>";
 		};
@@ -57,6 +72,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26F017FF2DCA90C200E60DB1 /* KeychainAccess in Frameworks */,
+				26B8E54A2DA5851E0042D2C1 /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +101,7 @@
 				267EF3DA2D243D07007B4F91 /* whizKidz */,
 				267EF3EB2D243D0A007B4F91 /* whizKidzTests */,
 				267EF3F52D243D0A007B4F91 /* whizKidzUITests */,
+				26F017FD2DCA90C200E60DB1 /* Frameworks */,
 				267EF3D92D243D07007B4F91 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -96,6 +114,13 @@
 				267EF3F22D243D0A007B4F91 /* whizKidzUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		26F017FD2DCA90C200E60DB1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -118,6 +143,8 @@
 			);
 			name = whizKidz;
 			packageProductDependencies = (
+				26B8E5492DA5851E0042D2C1 /* GRDB */,
+				26F017FE2DCA90C200E60DB1 /* KeychainAccess */,
 			);
 			productName = whizKidz;
 			productReference = 267EF3D82D243D07007B4F91 /* whizKidz.app */;
@@ -201,6 +228,10 @@
 			);
 			mainGroup = 267EF3CF2D243D07007B4F91;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				26B8E5482DA5851E0042D2C1 /* XCRemoteSwiftPackageReference "GRDB" */,
+				26F017FA2DCA8FCB00E60DB1 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 267EF3D92D243D07007B4F91 /* Products */;
 			projectDirPath = "";
@@ -406,11 +437,13 @@
 				DEVELOPMENT_TEAM = 3ZVWXGRC69;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = whizKidz/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app requires microphone access to recognize speech.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We need access to your microphone to recognize speech.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -435,11 +468,13 @@
 				DEVELOPMENT_TEAM = 3ZVWXGRC69;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = whizKidz/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app requires microphone access to recognize speech.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We need access to your microphone to recognize speech.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -565,6 +600,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		26B8E5482DA5851E0042D2C1 /* XCRemoteSwiftPackageReference "GRDB" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		26F017FA2DCA8FCB00E60DB1 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		26B8E5492DA5851E0042D2C1 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26B8E5482DA5851E0042D2C1 /* XCRemoteSwiftPackageReference "GRDB" */;
+			productName = GRDB;
+		};
+		26F017FE2DCA90C200E60DB1 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26F017FA2DCA8FCB00E60DB1 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 267EF3D02D243D07007B4F91 /* Project object */;
 }
