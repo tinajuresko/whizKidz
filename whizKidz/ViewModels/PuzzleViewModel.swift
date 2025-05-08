@@ -21,6 +21,10 @@ class PuzzleViewModel: ObservableObject {
     @Published var timeRemaining: Int = 45
     var gameTimer: GameTimer!
     
+    private var currentLevelIndex: Int {
+        UserDefaults.standard.integer(forKey: KeysManager.userDefaultsLevelKey)
+    }
+    
     init() {
         currentWord = Word(word: "", scrambledWord: [])
         gameTimer = GameTimer(totalTime: 45) { [weak self] in
@@ -28,14 +32,23 @@ class PuzzleViewModel: ObservableObject {
         }
         gameTimer.$timeRemaining
             .assign(to: &$timeRemaining)
+        setTimeBasedOnLevel()
         gameTimer.start()
         getNextWord()
     }
+    
+    func setTimeBasedOnLevel() {
+        let timeReductionFactor = 10
+        let baseTime = 60
+        let reducedTime = baseTime - (currentLevelIndex * timeReductionFactor)
+        timeRemaining = max(reducedTime, 20)
+    }
+    
     func playAgain() {
         gameIsOver = false
         score = 0
         currentWord = Word(word: "", scrambledWord: [])
-        
+        setTimeBasedOnLevel()
         gameTimer.start()
         
         getNextWord()

@@ -74,7 +74,7 @@ struct ProblemView<T: ProblemProtocol>: View {
         ProblemView(problem: MathProblem(
                 question: "1 + 2",
                 answers: ["2", "3", "4", "5"],
-                correctAnswer: ["3"]),
+                correctAnswer: ["3"], difficulty: .easy),
                         onSolve: { _ in print("Solved Math!") })
 
         ProblemView(problem: HygieneProblem(

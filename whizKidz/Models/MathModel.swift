@@ -13,28 +13,76 @@ struct MathProblem: ProblemProtocol, Equatable {
     let answers: [String]
     let correctAnswer: [String]
     let explanation: String? = nil
-    
+    let difficulty: DifficultyLevel
 }
 
-let mathProblems: [MathProblem] = [
-    MathProblem(question: "1 + 2", answers: ["2", "3", "4", "5"], correctAnswer: ["3"]),
-    MathProblem(question: "2 + 3", answers: ["4", "5", "6", "7"], correctAnswer: ["5"]),
-    MathProblem(question: "4 + 5 + 6", answers: ["12", "13", "14", "15"], correctAnswer: ["15"]),
-    MathProblem(question: "7 - 3", answers: ["3", "4", "5", "6"], correctAnswer: ["4"]),
-    MathProblem(question: "3 + 6 + 1", answers: ["8", "9", "10", "11"], correctAnswer: ["10"]),
-    MathProblem(question: "5 - 2", answers: ["2", "3", "4", "5"], correctAnswer: ["3"]),
-    MathProblem(question: "6 + 4", answers: ["8", "9", "10", "11"], correctAnswer: ["10"]),
-    MathProblem(question: "9 - 4", answers: ["4", "5", "6", "7"], correctAnswer: ["5"]),
-    MathProblem(question: "3 + 3 + 3", answers: ["8", "9", "10", "11"], correctAnswer: ["9"]),
-    MathProblem(question: "2 + 2 + 2", answers: ["5", "6", "7", "8"], correctAnswer: ["6"]),
-    MathProblem(question: "2 x 3", answers: ["5", "6", "7", "8"], correctAnswer: ["6"]),
-    MathProblem(question: "4 x 2", answers: ["6", "7", "8", "9"], correctAnswer: ["8"]),
-    MathProblem(question: "5 x 3", answers: ["12", "13", "14", "15"], correctAnswer: ["15"]),
-    MathProblem(question: "6 x 2", answers: ["10", "11", "12", "13"], correctAnswer: ["12"]),
-    MathProblem(question: "1 + 5 + 3", answers: ["7", "8", "9", "10"], correctAnswer: ["9"]),
-    MathProblem(question: "8 - 2 - 3", answers: ["2", "3", "4", "5"], correctAnswer: ["3"]),
-    MathProblem(question: "7 + 4", answers: ["10", "11", "12", "13"], correctAnswer: ["11"]),
-    MathProblem(question: "3 x 4", answers: ["10", "11", "12", "13"], correctAnswer: ["12"]),
-    MathProblem(question: "6 + 7 + 2", answers: ["13", "14", "15", "16"], correctAnswer: ["15"]),
-    MathProblem(question: "10 - 5 - 2", answers: ["2", "3", "4", "5"], correctAnswer: ["3"])
-]
+func generateProblem(level: DifficultyLevel) -> MathProblem {
+    switch level {
+    case .easy:
+        let a = Int.random(in: 1...5)
+        let b = Int.random(in: 1...5)
+        let correct = a + b
+        let answers = generateAnswerOptions(correct: correct)
+        return MathProblem(
+            question: "\(a) + \(b)",
+            answers: answers,
+            correctAnswer: ["\(correct)"],
+            difficulty: .easy
+        )
+
+    case .medium:
+        let a = Int.random(in: 1...10)
+        let b = Int.random(in: 1...10)
+        let c = Int.random(in: 1...5)
+        let correct = a + b - c
+        let answers = generateAnswerOptions(correct: correct)
+        return MathProblem(
+            question: "\(a) + \(b) - \(c)",
+            answers: answers,
+            correctAnswer: ["\(correct)"],
+            difficulty: .medium
+        )
+
+    case .hard:
+        let a = Int.random(in: 2...5)
+        let b = Int.random(in: 2...5)
+        let c = Int.random(in: 1...10)
+        let correct = a * b + c
+        let answers = generateAnswerOptions(correct: correct)
+        return MathProblem(
+            question: "\(a) x \(b) + \(c)",
+            answers: answers,
+            correctAnswer: ["\(correct)"],
+            difficulty: .hard
+        )
+    }
+}
+
+func generateAnswerOptions(correct: Int) -> [String] {
+    var options = Set([correct])
+    while options.count < 4 {
+        options.insert(correct + Int.random(in: -3...3))
+    }
+    return Array(options).shuffled().map { String($0) }
+}
+
+func generateMathProblemsSet(easyCount: Int = 10, mediumCount: Int = 10, hardCount: Int = 10) -> [MathProblem] {
+    var problems: [MathProblem] = []
+
+    for _ in 0..<easyCount {
+        problems.append(generateProblem(level: .easy))
+    }
+    
+    for _ in 0..<mediumCount {
+        problems.append(generateProblem(level: .medium))
+    }
+    
+    for _ in 0..<hardCount {
+        problems.append(generateProblem(level: .hard))
+    }
+
+    return problems.shuffled()
+}
+
+let mathProblems: [MathProblem] = generateMathProblemsSet()
+

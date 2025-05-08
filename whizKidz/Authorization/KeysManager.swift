@@ -10,4 +10,5 @@ import Foundation
 enum KeysManager {
     static let userDefaultsKey = "name"
     static let keychainKey = "token"
+    static let userDefaultsLevelKey = "level"
 }

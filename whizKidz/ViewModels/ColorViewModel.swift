@@ -16,6 +16,10 @@ class ColorViewModel: ObservableObject {
     @Published var gameOver: Bool = false
     @Published var timeRemaining: Int = 30
     var gameTimer: GameTimer!
+    
+    private var currentLevelIndex: Int {
+        UserDefaults.standard.integer(forKey: KeysManager.userDefaultsLevelKey)
+    }
 
     init() {
         gameTimer = GameTimer(totalTime: 30) { [weak self] in
@@ -23,8 +27,15 @@ class ColorViewModel: ObservableObject {
         }
         gameTimer.$timeRemaining
             .assign(to: &$timeRemaining)
-        
+        setTimeBasedOnLevel()
         resetGame()
+    }
+    
+    func setTimeBasedOnLevel() {
+        let timeReductionFactor = 10
+        let baseTime = 60
+        let reducedTime = baseTime - (currentLevelIndex * timeReductionFactor)
+        timeRemaining = max(reducedTime, 20)
     }
     
     func resetGame() {
@@ -33,6 +44,7 @@ class ColorViewModel: ObservableObject {
         cards = shuffledColors.map { MemoryCard(color: $0) }
         score = 0
         flippedCards = []
+        setTimeBasedOnLevel()
         gameTimer.start()
     }
     

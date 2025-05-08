@@ -16,6 +16,10 @@ class MathViewModel: ObservableObject {
     @Published var gameOver: Bool = false
     @Published var timeRemaining: Int = 30
     var gameTimer: GameTimer!
+    
+    private var currentLevelIndex: Int {
+        UserDefaults.standard.integer(forKey: KeysManager.userDefaultsLevelKey)
+    }
 
     init() {
         gameTimer = GameTimer(totalTime: 30) { [weak self] in
@@ -34,8 +38,10 @@ class MathViewModel: ObservableObject {
     }
     
     private func getQuestion() -> MathProblem? {
-        let availableQuestions = mathProblems.filter { question in
-            !usedQuestions.contains(where: { $0 == question })
+        let difficulty = difficultyForCurrentLevel(for: currentLevelIndex)
+        
+        let availableQuestions = mathProblems.filter {
+            $0.difficulty == difficulty && !usedQuestions.contains($0)
         }
         
         if let nextQuestion = availableQuestions.randomElement() {
@@ -45,8 +51,9 @@ class MathViewModel: ObservableObject {
         
         usedQuestions.removeAll()
         
-        return mathProblems.randomElement()
+        return mathProblems.filter { $0.difficulty == difficulty }.randomElement()
     }
+    
     
     func playAgain() {
         round = 0

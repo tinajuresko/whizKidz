@@ -17,14 +17,26 @@ class HygieneViewModel: ObservableObject {
     @Published var timeRemaining: Int = 60
     var gameTimer: GameTimer!
     
+    private var currentLevelIndex: Int {
+        UserDefaults.standard.integer(forKey: KeysManager.userDefaultsLevelKey)
+    }
+    
     init() {
         gameTimer = GameTimer(totalTime: 60) { [weak self] in
             self?.endGame()
         }
         gameTimer.$timeRemaining
             .assign(to: &$timeRemaining)
+        setTimeBasedOnLevel()
         gameTimer.start()
         getNextQuestion()
+    }
+    
+    func setTimeBasedOnLevel() {
+        let timeReductionFactor = 10
+        let baseTime = 60
+        let reducedTime = baseTime - (currentLevelIndex * timeReductionFactor)
+        timeRemaining = max(reducedTime, 20)
     }
     
     func getNextQuestion() {
@@ -36,7 +48,7 @@ class HygieneViewModel: ObservableObject {
     private func getQuestion() -> HygieneProblem? {
         let availableQuestions = hygieneProblems.filter { question in
                     !usedQuestions.contains(where: { $0 == question })
-                }
+        }
         
         if let nextQuestion = availableQuestions.randomElement() {
             usedQuestions.append(nextQuestion)
@@ -53,6 +65,7 @@ class HygieneViewModel: ObservableObject {
         correctAnswers = 0
         
         gameOver = false
+        setTimeBasedOnLevel()
         gameTimer.start()
         getNextQuestion()
     }
