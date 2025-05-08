@@ -86,5 +86,15 @@ class StatisticsViewModel: ObservableObject {
         
         return scores
     }
+    
+    func totalScore() -> Double {
+        return DBManager.shared.fetchAllScores(for: userId).reduce(0) { $0 + $1.score }
+    }
+
+    func currentLevel() -> Level {
+        let total = totalScore()
+        let index = min(Int(total / 50), levels.count - 1) // Svakih 50 bodova -> novi level
+        return levels[index]
+    }
 
 }

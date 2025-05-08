@@ -87,24 +87,6 @@ final class DBManager {
         }
     }
     
-    /*func fetchWeeklyStatistics(userId: String, category: String) -> [GameStatisticsDb] {
-        let calendar = Calendar.current
-        let oneWeekAgo = calendar.date(byAdding: .weekOfYear, value: -1, to: Date())!
-        
-        do {
-            return try dbQueue.read { db in
-                try GameStatisticsDb.fetchAll(db, sql: """
-                    SELECT * FROM GameStatisticsDb
-                    WHERE userId = ? AND category = ? AND timestamp >= ?
-                    ORDER BY timestamp DESC
-                """, arguments: [userId, category, oneWeekAgo])
-            }
-        } catch {
-            print("Error fetching weekly statistics: \(error.localizedDescription)")
-            return []
-        }
-    }*/
-    
     func fetchGameStatistics(userId: String, category: String, from startDate: Date, to endDate: Date) -> [GameStatisticsDb] {
         do {
             return try dbQueue.read { db in
@@ -123,6 +105,35 @@ final class DBManager {
         try dbQueue.read { db in
             let users = try UserDb.fetchAll(db)
             return users
+        }
+    }
+    
+    func fetchAllScores(for userId: String) -> [GameStatisticsDb] {
+        do {
+            return try dbQueue.read { db in
+                try GameStatisticsDb.fetchAll(db, sql: """
+                    SELECT * FROM GameStatisticsDb
+                    WHERE userId = ?
+                """, arguments: [userId])
+            }
+        } catch {
+            print("Error fetching all scores: \(error.localizedDescription)")
+            return []
+        }
+    }
+
+    func fetchTotalScore(for userId: String) -> Double {
+        do {
+            return try dbQueue.read { db in
+                let total = try Double.fetchOne(db, sql: """
+                    SELECT SUM(score) FROM GameStatisticsDb
+                    WHERE userId = ?
+                """, arguments: [userId]) ?? 0.0
+                return total
+            }
+        } catch {
+            print("Error fetching total score: \(error.localizedDescription)")
+            return 0.0
         }
     }
 }

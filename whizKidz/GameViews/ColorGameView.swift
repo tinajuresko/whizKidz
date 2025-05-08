@@ -16,7 +16,7 @@ struct ColorGameView: View {
     
     var body: some View {
         ZStack {
-            Image("background")
+            Image("appBackground")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(minWidth: 0, maxWidth: .infinity)

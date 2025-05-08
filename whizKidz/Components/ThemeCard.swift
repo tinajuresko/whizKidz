@@ -23,7 +23,7 @@ struct ThemeCard: View {
         }
         .frame(width: 200, height: 70)
         .padding()
-        .background(Color.white)
+        .background(Color.white.opacity(0.7))
         .cornerRadius(10)
     }
 }

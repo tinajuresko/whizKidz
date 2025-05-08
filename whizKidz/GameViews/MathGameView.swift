@@ -15,7 +15,7 @@ struct MathGameView: View {
     @State private var plantStage: Int = 1
     var body: some View {
         ZStack {
-            Image("background")
+            Image("appBackground")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(minWidth: 0, maxWidth: .infinity)
@@ -36,6 +36,16 @@ struct MathGameView: View {
                             dismissButton: .default(Text("Got it!")))
                     }
                     Spacer()
+                    
+                    VStack(alignment: .trailing) {
+                        Text("Time: \(viewModel.timeRemaining)s")
+                            .font(.title3)
+                            .foregroundColor(.red)
+                        Text("Score: \(viewModel.correctAnswers)")
+                            .font(.title3)
+                            .foregroundColor(.blue)
+                    }
+                    .padding()
                 }
                 .padding([.top, .leading])
                 
@@ -62,7 +72,6 @@ struct MathGameView: View {
                             if viewModel.round < 5 {
                                 viewModel.getNextQuestion()
                             }else {
-                                viewModel.calculateFinalScore()
                                 showModal = true
                             }
                             
@@ -75,9 +84,11 @@ struct MathGameView: View {
                 }.offset(y: -150)
                 
             }
+            .padding(.top, 100)
+            
             if showModal {
                 GameOverModalView(
-                    message: "Congratulations! You did great! 🏆",
+                    message: "Time's up ⏱️! Your score: \(viewModel.correctAnswers)",
                     onPlayAgain: {
                         showModal = false
                         plantStage = 1
@@ -88,6 +99,11 @@ struct MathGameView: View {
                 .animation(.easeInOut, value: showModal)
                 .zIndex(1)
                     
+            }
+        }
+        .onChange(of: viewModel.gameOver) { isGameOver in
+            if isGameOver {
+                showModal = true
             }
         }
     }

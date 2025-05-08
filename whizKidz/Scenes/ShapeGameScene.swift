@@ -42,9 +42,6 @@ class ShapeGameScene: SKScene {
         instructionLabel.position = CGPoint(x: size.width / 2, y: size.height - 100)
 
         addChild(instructionLabel)
-
-
-
     }
     
     func createShape() {

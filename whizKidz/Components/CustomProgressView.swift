@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct ProgressView: View {
+struct CustomProgressView: View {
     @Binding var progress: Double
 
     var body: some View {
         GeometryReader { geometry in
             ZStack {
                 RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.white)
+                    .fill(Color.white.opacity(0.7))
                         .frame(width: geometry.size.width)
                         .shadow(radius: 5)
                 
@@ -57,5 +57,5 @@ struct ProgressView: View {
 
 
 #Preview {
-    ProgressView(progress: .constant(0.0))
+    CustomProgressView(progress: .constant(0.0))
 }

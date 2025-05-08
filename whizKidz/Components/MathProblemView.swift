@@ -26,6 +26,7 @@ struct ProblemView<T: ProblemProtocol>: View {
         VStack {
             Text(problem.question)
                 .font(.title)
+                .foregroundColor(.gray)
                 .padding()
                 
             VStack {
@@ -70,17 +71,17 @@ struct ProblemView<T: ProblemProtocol>: View {
 
 #Preview {
     VStack {
-            ProblemView(problem: MathProblem(
+        ProblemView(problem: MathProblem(
                 question: "1 + 2",
                 answers: ["2", "3", "4", "5"],
                 correctAnswer: ["3"]),
                         onSolve: { _ in print("Solved Math!") })
 
-            ProblemView(problem: HygieneProblem(
+        ProblemView(problem: HygieneProblem(
                 question: "When should you wash your hands?",
                 answers: ["Before eating", "After using the restroom", "All of the above"],
                 correctAnswer: ["All of the above"],
                 explanation: "Washing hands prevents the spread of germs."),
                         onSolve: { _ in print("Solved Hygiene!") })
-        }
+    }
 }

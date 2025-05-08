@@ -20,12 +20,28 @@ class AlphabetViewModel: ObservableObject {
     @Published var shuffledLetters: [String] = []
     @Published var usedPairs: Set<LetterImagePair> = []
     
+    @Published var score: Int = 0
+    @Published var gameIsOver: Bool = false
+    @Published var timeRemaining: Int = 60
+    var gameTimer: GameTimer!
+    
     init() {
+        gameTimer = GameTimer(totalTime: 60) { [weak self] in
+            self?.gameOver()
+        }
+        gameTimer.$timeRemaining
+            .assign(to: &$timeRemaining)
+        gameTimer.start()
         startNewRound()
     }
     
     func startNewRound() {
-        print("starting round")
+        
+        if round >= 5 {
+            gameOver()
+            return
+        }
+        
         if usedPairs.count == alphabetGameData.count {
             usedPairs.removeAll()
         }
@@ -38,6 +54,9 @@ class AlphabetViewModel: ObservableObject {
     
     func playAgain() {
         round = 0
+        score = 0
+        gameIsOver = false
+        gameTimer.start()
         startNewRound()
     }
     
@@ -68,6 +87,9 @@ class AlphabetViewModel: ObservableObject {
         let pairToCheck = LetterImagePair(letter: letter, image: image)
         if let match = currentRound.first(where: { LetterImagePair(letter: $0.letter, image: $0.image) == pairToCheck }) {
             correctMatches += 1
+            if correctMatches == 3 {
+                score += 1
+            }
             return true
         }
         return false
@@ -79,5 +101,20 @@ class AlphabetViewModel: ObservableObject {
     
     func markCorrectLetters(letter: String) {
         correctLetters.insert(letter)
+    }
+    
+    func gameOver() {
+        gameTimer.stop()
+        
+        let scoreDouble = Double(score)
+        guard let username = UserDefaults.standard.string(forKey: KeysManager.userDefaultsKey) else { return }
+        
+        DBManager.shared.saveGameStatistics(
+            userId: username,
+            gameName: "AlphabetGame",
+            category: Category.LanguageUnderstanding.rawValue,
+            score: scoreDouble
+        )
+        gameIsOver = true
     }
 }

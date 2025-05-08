@@ -13,13 +13,13 @@ struct StatisticsView: View {
     @State private var selectedCategory: Category = .Memory
     
     var body: some View {
-        ZStack {
-            Image("background")
+        ZStack(alignment: .bottomTrailing) {
+            Image("appBackground")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(minWidth: 0, maxWidth: .infinity)
+                .frame(minWidth: 0, maxWidth: .infinity, maxHeight: .infinity)
                 .edgesIgnoringSafeArea(.all)
-            
+
             VStack {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 20) {
@@ -30,17 +30,16 @@ struct StatisticsView: View {
                     }
                     .padding()
                 }
-                
 
                 ScrollView {
                     VStack {
                         Text("Progress for \(selectedCategory.rawValue.capitalized)")
                             .font(.title)
                             .padding(.top, 20)
-                        
+
                         let delta = viewModel.calculateWeeklyAverageScoreDifference(category: selectedCategory.rawValue)
                         let comment = viewModel.generateProgressComment(delta: delta)
-                        
+
                         Text(comment)
                             .font(.body)
                             .padding()
@@ -48,7 +47,7 @@ struct StatisticsView: View {
                             .background(Color.white.opacity(0.8))
                             .cornerRadius(10)
                             .padding()
-                        
+
                         let scores = viewModel.fetchDailyScoresForWeek(category: selectedCategory.rawValue)
 
                         Chart {
@@ -65,14 +64,20 @@ struct StatisticsView: View {
                         .background(Color.white.opacity(0.8))
                         .cornerRadius(10)
                         .padding(.horizontal)
-
                     }
-                    .frame(maxHeight: .infinity)
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(20)
                     .padding()
                 }
+
+                Spacer(minLength: 0)
             }
+            .padding(.top, 100)
+            
+            GifImageView(name: "astronautStatistics")
+                .frame(width: 120, height: 120)
+                .padding(.bottom, 80)
+                .padding(.trailing, 20)
         }
     }
 }
@@ -95,7 +100,7 @@ struct CategoryButton: View {
                 .foregroundColor(.white)
                 .cornerRadius(15)
                 .shadow(radius: 5)
-                .scaleEffect(selectedCategory == category ? 1.1 : 1.0) // Slightly enlarge when selected
+                .scaleEffect(selectedCategory == category ? 1.1 : 1.0)
                 .animation(.easeInOut, value: selectedCategory)
         }
     }

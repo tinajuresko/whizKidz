@@ -16,7 +16,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Image("background")
+                Image("appBackground")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(minWidth: 0, maxWidth: .infinity)
@@ -28,15 +28,25 @@ struct ContentView: View {
                             Image("profile-settings")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 55, height: 55)
+                                .frame(width: 35, height: 35)
+                                .padding(.top, 100)
                                 .padding(.leading)
                         }
                         
-                        NavigationLink(destination: StatisticsView()){
+                        NavigationLink(destination: LevelsView()){
                             Image("award")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 55, height: 55)
+                                .frame(width: 35, height: 35)
+                                .padding(.top, 100)
+                        }
+                        
+                        NavigationLink(destination: StatisticsView()){
+                            Image("statistics")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 25, height: 25)
+                                .padding(.top, 100)
                         }
                         
                         Spacer()
@@ -59,6 +69,7 @@ struct ContentView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 250, height: 250)
+                                .offset(y: -50)
                 
                             Text(viewModel.displayedText)
                                 .font(.body)
@@ -66,13 +77,13 @@ struct ContentView: View {
                                 .padding(20)
                                 .frame(width: 230, height: 230)
                                 .foregroundColor(.black)
-                                .offset(x: -10,y: -20)
+                                .offset(x: -10,y: -70)
                         }
                         .offset(y: -10)
                         
-                        GifImageView(name: "homeBee")
+                        GifImageView(name: "astronautGreetings")
                             .frame(width: 120, height: 120)
-                            .padding(.top, 50)
+                            .padding(.bottom, 24)
                             .offset(y: 20)
                     }
                 }

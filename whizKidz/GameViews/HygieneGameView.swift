@@ -19,7 +19,7 @@ struct HygieneGameView: View {
     
     var body: some View {
         ZStack {
-            Image("background")
+            Image("appBackground")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(minWidth: 0, maxWidth: .infinity)
@@ -39,7 +39,7 @@ struct HygieneGameView: View {
                             message: Text("Click on the correct answers and fix the tooth. Each correct answer helps the tooth stop hurting and be clean and healthy, just like your teeth should be!🦷 \nClick on the musical note on the right to make brushing your teeth more fun! 🤪"),
                             dismissButton: .default(Text("Got it!")))
                     }
-                    Spacer()
+                    
                     Image("music")
                         .resizable()
                         .scaledToFit()
@@ -48,6 +48,18 @@ struct HygieneGameView: View {
                         .onTapGesture {
                             showVideo = true
                         }
+                    
+                    Spacer()
+                    
+                    VStack(alignment: .trailing) {
+                        Text("Time: \(viewModel.timeRemaining)s")
+                            .font(.title3)
+                            .foregroundColor(.red)
+                        Text("Score: \(viewModel.correctAnswers)")
+                            .font(.title3)
+                            .foregroundColor(.blue)
+                    }
+                    .padding()
                 }
                 .padding([.top, .leading])
                 .sheet(isPresented: $showVideo) {
@@ -78,7 +90,6 @@ struct HygieneGameView: View {
                             if viewModel.round < 6 {
                                 viewModel.getNextQuestion()
                             }else {
-                                viewModel.calculateFinalScore()
                                 showModal = true
                             }
                         }
@@ -90,9 +101,10 @@ struct HygieneGameView: View {
                 }.offset(y: -150)
                 
             }
+            .padding(.top, 100)
             if showModal {
                 GameOverModalView(
-                    message: "Congratulations! You did great! 🏆",
+                    message: "Time's up ⏱️! Your score: \(viewModel.correctAnswers)",
                     onPlayAgain: {
                         showModal = false
                         toothStage = 1
@@ -103,6 +115,11 @@ struct HygieneGameView: View {
                 .animation(.easeInOut, value: showModal)
                 .zIndex(1)
                     
+            }
+        }
+        .onChange(of: viewModel.gameOver) { isGameOver in
+            if isGameOver {
+                showModal = true
             }
         }
     }

@@ -99,5 +99,12 @@ class PuzzleViewModel: ObservableObject {
             category: Category.Memory.rawValue,
             score: scoreDouble
         )
+        
+        DBManager.shared.saveGameStatistics(
+            userId: username,
+            gameName: "PuzzleGame",
+            category: Category.LanguageUnderstanding.rawValue,
+            score: scoreDouble
+        )
     }
 }

@@ -16,68 +16,82 @@ struct ProfileView: View {
     @State private var showingAvatarPicker = false
     
     @State private var selectedAge: Int = 5
-    private let ageRange = Array(3...18)
-
+    private let ageRange = Array(3...12)
     
     init() {
-        let username = UserDefaults.standard.string(forKey: KeysManager.userDefaultsKey) ?? "default" //AppStorage gore definiran nije jos spreman da bi se koristio u initu
-        _selectedAvatar = AppStorage(wrappedValue: "penguin", "selectedAvatar_\(username)") //backing storage zbog dinamickog appstoragea selectedAvatar
+        let username = UserDefaults.standard.string(forKey: KeysManager.userDefaultsKey) ?? "default"
+        _selectedAvatar = AppStorage(wrappedValue: "penguin", "selectedAvatar_\(username)")
     }
 
-    
     var body: some View {
         ZStack {
-            Image("background")
+            Image("appBackground")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(minWidth: 0, maxWidth: .infinity)
                 .edgesIgnoringSafeArea(.all)
             
-            VStack {
+            VStack(spacing: 20) {
+                Spacer().frame(height: 40)
+                
                 Image(selectedAvatar)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 120, height: 120)
                     .clipShape(Circle())
-                    .onTapGesture {
-                        showingAvatarPicker = true
-                    }
-                    .padding()
-                Text("Click on the Avatar to change it!")
+                    .shadow(radius: 10)
+                    .onTapGesture { showingAvatarPicker = true }
+                
+                Text("Tap the Avatar to change it")
                     .font(.subheadline)
                     .foregroundColor(.gray)
                 
-                
                 Text(username.isEmpty ? "No Username" : username)
-                    .font(.title)
-                    .padding(.top, 8)
-                    .padding(.bottom, 8)
+                    .font(.title.bold())
+                    .foregroundColor(.gray)
+                    .padding(.bottom, 12)
                 
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Your Age:")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                                        
-                    Picker("Age", selection: $selectedAge) {
+                VStack(spacing: 16) {
+                    Text("Select Your Age")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 15) {
                             ForEach(ageRange, id: \.self) { age in
-                                Text("\(age) years").tag(age)
+                                Text("\(age)")
+                                    .font(.headline)
+                                    .frame(width: 50, height: 50)
+                                    .background(selectedAge == age ? Color.blue : Color.gray.opacity(0.3))
+                                    .foregroundColor(.white)
+                                    .clipShape(Circle())
+                                    .overlay(
+                                        Circle().stroke(Color.white, lineWidth: selectedAge == age ? 3 : 0)
+                                    )
+                                    .onTapGesture {
+                                        selectedAge = age
+                                        saveAge()
+                                    }
+                                    .animation(.easeInOut, value: selectedAge)
                             }
                         }
-                        .pickerStyle(.wheel)
-                        .frame(height: 100)
-                        .clipped()
-                        .onChange(of: selectedAge) { _ in
-                            saveAge()
-                        }
+                        .padding(.horizontal, 10)
+                    }
                 }
-                .padding(.horizontal)
-                .background(Color.white)
+                .padding()
+                .background(Color.white.opacity(0.85))
                 .cornerRadius(20)
-                .shadow(radius: 5)
                 .padding(.horizontal)
                 
                 Spacer()
+                
+                HStack {
+                    Spacer()
+                    GifImageView(name: "astronautProfile")
+                        .frame(width: 100, height: 100)
+                        .padding(.trailing, 20)
+                        .padding(.bottom, 10)
+                }
+                
                 Button(action: logOut) {
                     Label("Log out", systemImage: "arrow.right.square.fill")
                         .font(.title2)
@@ -88,31 +102,33 @@ struct ProfileView: View {
                         .cornerRadius(12)
                 }
                 .padding(.horizontal)
+                .padding(.bottom, 100)
             }
             .sheet(isPresented: $showingAvatarPicker){
                 AvatarSelectionView(selectedAvatar: $selectedAvatar)
             }
+            .padding(.top, 100)
         }
         .onAppear {
             loadUserAge()
         }
     }
-    
+
     func loadUserAge() {
         do {
             if let user = try DBManager.shared.fetchUser(username: username),
-            let userAge = user.age {
+               let userAge = user.age {
                 selectedAge = userAge
             }
         } catch {
             print("Error loading user age: \(error.localizedDescription)")
         }
     }
-    
+
     func logOut() {
         authenticationVM.logOut()
     }
-    
+
     func saveAge() {
         do {
             if var user = try DBManager.shared.fetchUser(username: username) {
@@ -124,6 +140,7 @@ struct ProfileView: View {
         }
     }
 }
+
 
 #Preview {
     ProfileView().environmentObject(AuthenticationViewModel())

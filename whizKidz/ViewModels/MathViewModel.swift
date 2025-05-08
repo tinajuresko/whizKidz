@@ -12,14 +12,18 @@ class MathViewModel: ObservableObject {
     @Published var usedQuestions: [MathProblem] = []
     @Published var round: Int = 0
     @Published var correctAnswers: Int = 0
-    @Published var startTime: Date?
-    @Published var endTime: Date?
-    @Published var duration: TimeInterval?
-    @Published var speedMultiplier: Double = 1.0
-    @Published var finalScore: Double = 0.0
+    
+    @Published var gameOver: Bool = false
+    @Published var timeRemaining: Int = 30
+    var gameTimer: GameTimer!
 
     init() {
-        startTime = Date()
+        gameTimer = GameTimer(totalTime: 30) { [weak self] in
+            self?.endGame()
+        }
+        gameTimer.$timeRemaining
+            .assign(to: &$timeRemaining)
+        gameTimer.start()
         getNextQuestion()
     }
     
@@ -47,17 +51,24 @@ class MathViewModel: ObservableObject {
     func playAgain() {
         round = 0
         correctAnswers = 0
-        startTime = Date()
+        
+        gameOver = false
+        gameTimer.start()
         getNextQuestion()
     }
-    
-    func calculateFinalScore() {
-        endTime = Date()
-        if let start = startTime, let end = endTime {
-            let duration = end.timeIntervalSince(start)
-            speedMultiplier = max(1.0, 120.0 / duration)
-            finalScore = (Double(correctAnswers)/10)*speedMultiplier
-        }
+   
+    func endGame() {
+        gameOver = true
+        gameTimer.stop()
+        
+        let scoreDouble = Double(correctAnswers)
+        guard let username = UserDefaults.standard.string(forKey: KeysManager.userDefaultsKey) else { return }
+        DBManager.shared.saveGameStatistics(
+            userId: username,
+            gameName: "MathGame",
+            category: Category.LogicalThinking.rawValue,
+            score: scoreDouble
+        )
     }
 }
 
