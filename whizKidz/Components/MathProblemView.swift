@@ -26,7 +26,7 @@ struct ProblemView<T: ProblemProtocol>: View {
         VStack {
             Text(problem.question)
                 .font(.title)
-                .foregroundColor(.gray)
+                .foregroundColor(.white)
                 .padding()
                 
             VStack {

@@ -29,21 +29,9 @@ struct AlphabetView: View {
                 
                 VStack {
                     HStack {
-                        Button(action: {
-                            showAlert.toggle()
-                        }) {
-                            Image(systemName: "questionmark.circle")
-                                .font(.title)
-                                .foregroundColor(.blue)
-                                .padding()
-                        }
-                        .alert(isPresented: $showAlert) {
-                            Alert(title: Text("Game Instructions"),
-                                message: Text("Click on a letter, then choose an image that features an object or item starting with that letter. Try to match all the letters with their corresponding images as quickly as possible to help the worker bee produce delicious honey. 🐝🍯"),
-                                dismissButton: .default(Text("Got it!")))
-                        }
-                                            
+                        InfoButton(showAlert: $showAlert, instructions: "Click on a letter, then choose an image that features an object or item starting with that letter. Try to match all the letters with their corresponding images as quickly as possible to help the worker bee produce delicious honey. 🐝🍯")
                         Spacer()
+                        
                         VStack(alignment: .trailing) {
                             Text("Time: \(viewModel.timeRemaining)s")
                                 .font(.title3)
@@ -54,7 +42,6 @@ struct AlphabetView: View {
                         }
                         .padding()
                     }
-                    .padding([.top, .leading])
 
                     Image("honey\(honeyStage)")
                         .resizable()

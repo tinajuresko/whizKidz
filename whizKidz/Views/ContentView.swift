@@ -9,10 +9,8 @@ import SwiftUI
 import UIKit
 
 struct ContentView: View {
-    @StateObject private var viewModel = GreetingsViewModel()
     @StateObject private var authViewModel = AuthenticationViewModel()
 
-    
     var body: some View {
         NavigationView {
             ZStack {
@@ -48,10 +46,8 @@ struct ContentView: View {
                                 .frame(width: 25, height: 25)
                                 .padding(.top, 100)
                         }
-                        
                         Spacer()
                     }
-                    
                     
                     ScrollView(.vertical){
                         VStack(spacing: 10) {
@@ -64,36 +60,15 @@ struct ContentView: View {
                     }.padding()
                     
                     HStack {
-                        ZStack {
-                            Image("thinkingCloud")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 250, height: 250)
-                                .offset(y: -50)
-                
-                            Text(viewModel.displayedText)
-                                .font(.body)
-                                .multilineTextAlignment(.center)
-                                .padding(20)
-                                .frame(width: 230, height: 230)
-                                .foregroundColor(.black)
-                                .offset(x: -10,y: -70)
-                        }
-                        .offset(y: -10)
-                        
+                        Spacer()
                         GifImageView(name: "astronautGreetings")
                             .frame(width: 120, height: 120)
                             .padding(.bottom, 24)
-                            .offset(y: 20)
+                            .offset(y: -20)
                     }
                 }
             }
-            .onAppear {
-                viewModel.getRandomGreetings()
-                authViewModel.printAllUsers()
-            }
         }
-        
     }
 }
 

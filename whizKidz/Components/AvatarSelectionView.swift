@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AvatarSelectionView: View {
     @Binding var selectedAvatar: String
-    let avatars = ["penguin", "sea-lion", "gorilla", "panda", "bunny", "meerkat", "chicken"]
+    let avatars = (1...18).map {"avatar\($0)"}
     
     var body: some View {
         Text("Choose your Avatar")
@@ -37,6 +37,6 @@ struct AvatarSelectionView: View {
 }
 
 #Preview {
-    @Previewable @State var previewAvatar = "penguin"
+    @Previewable @State var previewAvatar = "avatar1"
     AvatarSelectionView(selectedAvatar: $previewAvatar)
 }

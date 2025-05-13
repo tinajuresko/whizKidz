@@ -22,19 +22,7 @@ struct MathGameView: View {
                 .edgesIgnoringSafeArea(.all)
             VStack{
                 HStack {
-                    Button(action: {
-                        showAlert.toggle()
-                    }) {
-                        Image(systemName: "questionmark.circle")
-                            .font(.title)
-                            .foregroundColor(.blue)
-                            .padding()
-                    }
-                    .alert(isPresented: $showAlert) {
-                        Alert(title: Text("Game Instructions"),
-                            message: Text("Click on the correct answer to help the plant grow! Each correct answer will make the plant grow taller. Try to answer all the questions to see the plant fully grown!"),
-                            dismissButton: .default(Text("Got it!")))
-                    }
+                    InfoButton(showAlert: $showAlert, instructions: "Click on the correct answer to help the plant grow! Each correct answer will make the plant grow taller. Try to answer all the questions to see the plant fully grown!")
                     Spacer()
                     
                     VStack(alignment: .trailing) {
@@ -47,7 +35,6 @@ struct MathGameView: View {
                     }
                     .padding()
                 }
-                .padding([.top, .leading])
                 
                 Spacer()
                 
@@ -55,7 +42,7 @@ struct MathGameView: View {
                     Image("plant\(plantStage)")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 200, height: 200)
+                        .frame(width: 150, height: 150)
                         .padding()
                         .transition(.scale)
                         .animation(.easeInOut, value: plantStage)
@@ -74,7 +61,6 @@ struct MathGameView: View {
                             }else {
                                 showModal = true
                             }
-                            
                         }
                     } else {
                         Text("All questions answered!")

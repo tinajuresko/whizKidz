@@ -17,7 +17,6 @@ struct LevelsView: View {
                 .aspectRatio(contentMode: .fill)
                 .edgesIgnoringSafeArea(.all)
             
-           
             VStack(spacing: 20) {
                     Text("Your Current Level")
                         .font(.title)
@@ -63,17 +62,14 @@ struct LevelsView: View {
                                 .padding(.horizontal)
                                 .padding(.top, 50)
                             }
-
                         }
                         .padding()
                     }
                     .padding(.horizontal)
-                    
                     Spacer()
             }
             .padding(.top, 80)
-            
-            
+    
             GifImageView(name: "astronautAwards")
                 .frame(width: 120, height: 120)
                 .padding(.bottom, 80)
@@ -84,7 +80,6 @@ struct LevelsView: View {
         }
     }
 }
-
 
 #Preview {
     LevelsView()

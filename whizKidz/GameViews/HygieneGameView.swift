@@ -26,29 +26,10 @@ struct HygieneGameView: View {
                 .edgesIgnoringSafeArea(.all)
             VStack{
                 HStack {
-                    Button(action: {
-                        showAlert.toggle()
-                    }) {
-                        Image(systemName: "questionmark.circle")
-                            .font(.title)
-                            .foregroundColor(.blue)
-                            .padding()
-                    }
-                    .alert(isPresented: $showAlert) {
-                        Alert(title: Text("Game Instructions"),
-                            message: Text("Click on the correct answers and fix the tooth. Each correct answer helps the tooth stop hurting and be clean and healthy, just like your teeth should be!🦷 \nClick on the musical note on the right to make brushing your teeth more fun! 🤪"),
-                            dismissButton: .default(Text("Got it!")))
-                    }
-                    
-                    Image("music")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 30)
-                        .padding()
-                        .onTapGesture {
-                            showVideo = true
-                        }
-                    
+                   
+                    InfoButton(showAlert: $showAlert, instructions: "Click on the correct answers and fix the tooth. Each correct answer helps the tooth stop hurting and be clean and healthy, just like your teeth should be!🦷 \nClick on the musical note on the right to make brushing your teeth more fun! 🤪")
+                        .offset(y: -45)
+                       
                     Spacer()
                     
                     VStack(alignment: .trailing) {
@@ -58,10 +39,17 @@ struct HygieneGameView: View {
                         Text("Score: \(viewModel.correctAnswers)")
                             .font(.title3)
                             .foregroundColor(.blue)
+                        Image("music")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30, height: 30)
+                            .padding()
+                            .onTapGesture {
+                                showVideo = true
+                            }
                     }
                     .padding()
                 }
-                .padding([.top, .leading])
                 .sheet(isPresented: $showVideo) {
                     VideoPopupView(showVideo: $showVideo)
                 }
@@ -72,7 +60,7 @@ struct HygieneGameView: View {
                     Image("tooth\(toothStage)")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 200, height: 200)
+                        .frame(width: 150, height: 150)
                         .padding()
                         .transition(.scale)
                         .animation(.easeInOut, value: toothStage)
@@ -88,7 +76,9 @@ struct HygieneGameView: View {
                             }
                             viewModel.round += 1
                             if viewModel.round < 6 {
-                                viewModel.getNextQuestion()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                                    viewModel.getNextQuestion()
+                                }
                             }else {
                                 showModal = true
                             }

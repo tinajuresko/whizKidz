@@ -26,10 +26,7 @@ struct InfoButton: View {
                       message: Text(instructions),
                       dismissButton: .default(Text("Got it!")))
             }
-            Spacer()
         }
-        .padding([.top, .leading])
-        Spacer()
     }
 }
 

@@ -24,19 +24,7 @@ struct ColorGameView: View {
             
             VStack {
                 HStack {
-                    Button(action: {
-                        showAlert.toggle()
-                    }) {
-                        Image(systemName: "questionmark.circle")
-                            .font(.title)
-                            .foregroundColor(.blue)
-                            .padding()
-                    }
-                    .alert(isPresented: $showAlert) {
-                        Alert(title: Text("Game Instructions"),
-                            message: Text("Turn over the cards to find matching pairs of colors. Click on a card to flip it and try to match it with another one. Try to match all the pairs with the least amount of moves."),
-                            dismissButton: .default(Text("Got it!")))
-                    }
+                    InfoButton(showAlert: $showAlert, instructions: "Turn over the cards to find matching pairs of colors. Click on a card to flip it and try to match it with another one. Try to match all the pairs with the least amount of moves.")
                     Spacer()
                     
                     VStack(alignment: .trailing) {

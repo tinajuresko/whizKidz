@@ -24,28 +24,27 @@ struct YouTubeView: UIViewRepresentable {
 struct VideoPopupView: View {
     @Binding var showVideo: Bool
 
-        var body: some View {
-            VStack {
-                HStack {
-                    Spacer()
-                    Button(action: { showVideo = false }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.title)
-                            .foregroundColor(.gray)
-                            .padding()
-                    }
+    var body: some View {
+        VStack {
+            HStack {
+                Spacer()
+                Button(action: { showVideo = false }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.title)
+                        .foregroundColor(.gray)
+                        .padding()
                 }
-                
-                GifImageView(name: "astronautMusic")
-                    .frame(width: 120, height: 120)
-                    .offset(x: 100 ,y: 10)
-                
-                YouTubeView(videoID: "wCio_xVlgQ0")
-                    .frame(height: 300)
-                    .cornerRadius(10)
-                    .padding()
             }
+            GifImageView(name: "astronautMusic")
+                .frame(width: 120, height: 120)
+                .offset(x: 100 ,y: 10)
+                
+            YouTubeView(videoID: "wCio_xVlgQ0")
+                .frame(height: 300)
+                .cornerRadius(10)
+                .padding()
         }
+    }
 }
 
 #Preview {

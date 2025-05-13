@@ -24,20 +24,9 @@ struct PuzzleGameView: View {
                 .edgesIgnoringSafeArea(.all)
             VStack{
                 HStack {
-                    Button(action: {
-                        showAlert.toggle()
-                    }) {
-                        Image(systemName: "questionmark.circle")
-                            .font(.title)
-                            .foregroundColor(.blue)
-                            .padding()
-                    }
-                    .alert(isPresented: $showAlert) {
-                        Alert(title: Text("Game Instructions"),
-                            message: Text("Unscramble the letters to form the correct word! Click on the letters in the right order and help the butterfly reach the flower. Each correct word moves the butterfly closer to the flower. Can you complete all the words and help the butterfly find its way? 🦋🌸"),
-                            dismissButton: .default(Text("Got it!")))
-                    }
+                    InfoButton(showAlert: $showAlert, instructions: "Unscramble the letters to form the correct word! Click on the letters in the right order and help the butterfly reach the flower. Each correct word moves the butterfly closer to the flower. Can you complete all the words and help the butterfly find its way? 🦋🌸")
                     Spacer()
+                    
                     VStack(alignment: .trailing) {
                         Text("Time: \(viewModel.timeRemaining)s")
                             .font(.title3)
@@ -48,8 +37,6 @@ struct PuzzleGameView: View {
                     }
                     .padding()
                 }
-                .padding([.top, .leading])
-                
                 
                 CustomProgressView(progress: $viewModel.progress)
                     .frame(height: 60)
@@ -108,7 +95,7 @@ struct PuzzleGameView: View {
                 
                 Spacer()
             }
-            .padding(.top, 60)
+            .padding(.top, 100)
             
             if showModal {
                 GameOverModalView(

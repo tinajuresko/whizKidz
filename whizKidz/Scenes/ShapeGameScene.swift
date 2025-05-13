@@ -9,6 +9,8 @@ import Foundation
 import SpriteKit
 
 class ShapeGameScene: SKScene {
+    private var viewModel: ShapeGameViewModel
+    
     var targetShape: String = ""
     var instructionLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
     
@@ -17,9 +19,18 @@ class ShapeGameScene: SKScene {
     var speedFactor: CGFloat = 1.0
     var spawnDuration: TimeInterval = 1.0
     
+    init(viewModel: ShapeGameViewModel) {
+        self.viewModel = viewModel
+        super.init(size: .zero)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func didMove(to view: SKView) {
         backgroundColor = .clear
-        let background = SKSpriteNode(imageNamed: "background")
+        let background = SKSpriteNode(imageNamed: "appBackground")
         background.position = CGPoint(x: size.width / 2, y: size.height / 2)
         background.zPosition = -1
         addChild(background)
@@ -117,29 +128,13 @@ class ShapeGameScene: SKScene {
         
         addChild(shapeNode)
     }
-    
-    override func update(_ currentTime: TimeInterval) {
-        let deltaTime = currentTime - lastUpdateTime
-        lastUpdateTime = currentTime
-        timeElapsed += deltaTime
-        
-        if timeElapsed >= 30 {
-            timeElapsed = 0
-            speedFactor += 0.1
-            if spawnDuration > 0.3 {
-                spawnDuration -= 0.1
-            }
-        }
-    }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
         let touchedNode = nodes(at: location).first
         
-        if touchedNode?.name == "playAgainButton" {
-            restartGame()
-        }else if let shapeNode = touchedNode as? SKShapeNode {
+        if let shapeNode = touchedNode as? SKShapeNode {
             if let name = shapeNode.name {
                 if name == targetShape {
                     let scaleUp = SKAction.scale(to: 1.5, duration: 0.2)
@@ -148,6 +143,8 @@ class ShapeGameScene: SKScene {
                     
                     let sequence = SKAction.sequence([scaleUp, scaleDown, remove])
                     shapeNode.run(sequence)
+                    
+                    viewModel.incrementScore()
                     
                     targetShape = ["circle", "square", "triangle", "rectangle", "hexagon", "star"].randomElement() ?? "circle"
                     instructionLabel.text = "Select: \(targetShape.capitalized)"
@@ -159,54 +156,7 @@ class ShapeGameScene: SKScene {
     }
     
     func gameOver() {
-        let gameOverLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
-        gameOverLabel.text = "Game Over!"
-        gameOverLabel.name = "gameOverLabel"
-        gameOverLabel.fontSize = 50
-        gameOverLabel.fontColor = .red
-        gameOverLabel.position = CGPoint(x: size.width / 2, y: size.height / 2)
-        addChild(gameOverLabel)
-        
-        showPlayAgainButton()
-
-        //isUserInteractionEnabled = false
-    }
-
-    func showPlayAgainButton() {
-        let playAgainButton = SKLabelNode(fontNamed: "AvenirNext-Bold")
-        playAgainButton.text = "Play Again"
-        playAgainButton.fontSize = 40
-        playAgainButton.fontColor = .white
-        playAgainButton.position = CGPoint(x: size.width / 2, y: size.height / 2 - 100)
-        playAgainButton.name = "playAgainButton"
-        
-        addChild(playAgainButton)
-    }
-    
-    func restartGame() {
-        timeElapsed = 0
-        lastUpdateTime = 0
-        speedFactor = 1.0
-        spawnDuration = 1.0
-        
-        children.forEach { child in
-            if child is SKShapeNode || child.name == "gameOverLabel" || child.name == "playAgainButton" {
-                child.removeFromParent()
-            }
-        }
-        
-        targetShape = ["circle", "square", "triangle", "rectangle", "hexagon", "star"].randomElement() ?? "circle"
-        instructionLabel.text = "Select: \(targetShape.capitalized)"
-        
-        let spawnAction = SKAction.repeatForever(
-            SKAction.sequence([
-                SKAction.run(createShape),
-                SKAction.wait(forDuration: spawnDuration)
-            ])
-        )
-        run(spawnAction)
-        
-        isUserInteractionEnabled = true
+        viewModel.endGame()
     }
 }
 
